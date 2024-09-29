@@ -1,0 +1,32 @@
+version: 2
+
+# Sources point to the tables in the database that contain the raw input data.
+# You can refer to these sources in the models by using the {{ source() }} jinja function.
+sources:
+  - name: sources
+    schema: "{{ var('schema_sources', target.schema) }}"
+    tables:
+      - name: Event_log_raw
+        tests: 
+          - pm_utils.exists
+        columns:
+          - name: '"Activity"'
+            tests:
+              - pm_utils.exists
+              - pm_utils.not_null:
+                  severity: warn
+          - name: '"Case_ID"'
+            tests:
+              - pm_utils.exists
+              - pm_utils.not_null
+          - name: '"Event_end"'
+            tests:
+              - pm_utils.exists
+              - pm_utils.not_null:
+                  severity: warn
+
+    # Quoting is enabled for databases, schemas, and identifiers.
+    quoting:
+      database: true
+      schema: true
+      identifier: true

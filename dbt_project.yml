@@ -1,0 +1,31 @@
+# Name and version of this dbt project.
+name: 'L2O'
+version: '2408.150.0'
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+config-version: 2
+# This setting configures which "profile" dbt uses for this project.
+profile: 'L2O'
+vars:
+  # Define schema_sources if your source tables are in a different schema. Example: schema_sources: "my_schema"
+  date_format: "{{ 'YYYY-MM-DD' if target.type == 'snowflake' else 23 }}"
+  datetime_format: "{{ 'YYYY-MM-DD hh24:mi:ss.ff3' if target.type == 'snowflake' else 21 }}"
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+# All models are materialized as table.
+models:
+  uipathCustom:
+    materialized: table
+# Quoting is enabled for databases, schemas, and identifiers.
+quoting:
+  database: true
+  schema: true
+  identifier: true
+# Quoting is enabled for columns in the seeds files.
+seeds:
+  quote_columns: true
+  full_refresh: true
+# Overwrite default name of schema suffix to prevent long schema name.
+tests:
+  +schema: ""
